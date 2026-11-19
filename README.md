@@ -1,7 +1,9 @@
-# RE-CAM: Readout-Enhanced Content-Addressable Memory for Quantitative Similarity Search
+# RE-CAM
 
-Hardware-aware readout training and function-approximation experiments for RE-CAM.
-SPICE matchline waveforms are included in `recam/data/10T_06V_CAM.csv`.
+Implementation of **RE-CAM: Readout-Enhanced Content-Addressable Memory for Quantitative Similarity Search**.
+
+Includes hardware-aware readout training and function-approximation experiments,
+with SPICE matchline waveforms in `recam/data/10T_06V_CAM.csv`.
 
 ## Installation
 
@@ -13,7 +15,17 @@ source .venv/bin/activate
 python -m pip install -e .
 ```
 
-## Experiments
+## Quick start
+
+```sh
+recam train --function linear --output results/linear
+```
+
+Trains and evaluates RE-CAM for the linear function using the default settings.
+
+## Usage
+
+### Paper experiments
 
 Each command evaluates all four target functions.
 
@@ -30,7 +42,7 @@ recam benchmark --experiment comparison-budget --dataset monte-carlo --output re
 recam benchmark --experiment comparison-budget --dataset distribution --output results/budget_distribution
 ```
 
-Table II compares U-ADC, RE-CAM(U), NU-ADC, RE-CAM(N), RE-CAM, and Finer Sensing.
+Table II compares the readout implementations below.
 Results are saved in `metrics.csv`; Table III averages are in `overall.csv`.
 
 Verify the paper's NRMSE values and relative changes with
@@ -39,7 +51,7 @@ Verify the paper's NRMSE values and relative changes with
 Comparison budget 15 and Finer Sensing (budget 7) use staged schedule search.
 Use `--search exhaustive` to optimize all feasible schedules (slower).
 
-## System Constraints
+### System Constraints
 
 | Constraint | Default | Command-line option |
 |---|---|---|
@@ -65,7 +77,7 @@ Finer Sensing doubles the clock rate with the same budget.
 The Table III sweep fixes budgets to 3, 7, and 15 and their clock rates to
 2, 4, and 8 GHz, respectively.
 
-## Hardware Nonidealities
+### Hardware Nonidealities
 
 | Nonideality | Default | Command-line option |
 |---|---|---|
@@ -76,7 +88,7 @@ The Table III sweep fixes budgets to 3, 7, and 15 and their clock rates to
 Append these options to `train` or `benchmark`. Discharge variation and residual
 offset are fixed within each matchline search; sensing noise varies per comparison.
 
-## Target Functions
+### Target Functions
 
 Similarity is `x = 32 - Hamming distance`, from 0 to 32. Training minimizes
 expected MSE of noisy outputs using FP16 decoding parameters.
@@ -88,7 +100,7 @@ expected MSE of noisy outputs using FP16 decoding parameters.
 | Sigmoid | `1 / (1 + exp(-(x-16)/2))` |
 | Exponential | `exp(x/8)` |
 
-## Datasets and Metric
+### Datasets and Metric
 
 - **Monte Carlo:** 5,000 noisy searches per similarity level; uniform training.
 - **Distribution:** Separate sets of 10,000 training and 10,000 validation queries,
@@ -97,6 +109,17 @@ expected MSE of noisy outputs using FP16 decoding parameters.
 
 NRMSE is `sqrt(MSE) / (f(32)-f(0))`, reported in percent. Relative changes compare
 against U-ADC in Table II and comparison budget 3 in Table III.
+
+## Readout implementations
+
+| Implementation | `--method` | Description |
+|---|---|---|
+| U-ADC | `u-adc` | Uniform voltage references with nominal-waveform decoding. |
+| RE-CAM(U) | `recam-u` | Uniform voltage references with optimized decoding. |
+| NU-ADC | `nu-adc` | Fixed output levels with nominal-waveform reference voltages. |
+| RE-CAM(N) | `recam-n` | Optimized references and decoding at one timestamp. |
+| RE-CAM | `recam` | Optimized comparison schedule, references, and decoding. |
+| Finer Sensing | `finer-sensing` | RE-CAM with twice the clock rate and the same comparison budget. |
 
 ## Citation
 
