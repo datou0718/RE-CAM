@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "recam"
+version = "0.1.0"
+description = "Hardware-aware readout training for quantitative CAM similarity search"
+readme = "README.md"
+requires-python = ">=3.12"
+license = {file = "LICENSE"}
+dependencies = ["numpy==2.3.5", "scipy==1.18.1"]
+
+[project.scripts]
+recam = "recam.__main__:main"
+
+[tool.setuptools.packages.find]
+include = ["recam*"]
+
+[tool.setuptools.package-data]
+recam = ["data/*.csv"]
