@@ -124,6 +124,15 @@ against U-ADC in Table II and comparison budget 3 in Table III.
 ## Citation
 
 ```bibtex
+@misc{RE-CAM,
+      title={RE-CAM: Readout-Enhanced Content-Addressable Memory for Quantitative Similarity Search}, 
+      author={Yi-Chun Liao and Dongyoung Lee and Jiazheng Chen and Tergel Molom-Ochir and Tomohisa Kawakami and Tania Roy and Ik-Joon Chang and X. Sharon Hu and Hai "Helen" Li and Yiran Chen},
+      year={2026},
+      eprint={2611.25326},
+      archivePrefix={arXiv},
+      primaryClass={cs.AR},
+      url={https://arxiv.org/abs/2611.25326}, 
+}
 ```
 
 Licensed under the [MIT License](LICENSE).
